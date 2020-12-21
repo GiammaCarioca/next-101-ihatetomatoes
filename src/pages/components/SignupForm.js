@@ -1,4 +1,5 @@
 import classNames from 'classnames'
+import { useForm } from 'react-hook-form'
 
 const ErrorMessage = ({ message }) => (
   <p className='inline-block px-3 mt-1 text-sm text-red-500'>{message}</p>
@@ -11,7 +12,13 @@ const SuccessMessage = () => (
 )
 
 const SignupForm = ({ title }) => {
-  const isLoading = true
+  // prevent submitting invalid or empty emails
+  const { register, errors, handleSubmit } = useForm()
+  // handle form submit
+
+  const onSubmit = (data) => console.log({ data })
+
+  const isLoading = false
 
   const formClass = classNames({
     'flex items-center border rounded-md border-gray-300 p-1 focus-within:border-blue-500 focus-within:ring-blue-200 focus-within:ring-4': true,
@@ -31,11 +38,19 @@ const SignupForm = ({ title }) => {
     <>
       <p className='p-1 mb-2'>{title}</p>
       <SuccessMessage />
-      <form className='max-w-sm'>
+      <form className='max-w-sm' onSubmit={handleSubmit(onSubmit)}>
         <div className={formClass}>
           <input
             className={inputClass}
             type='text'
+            name='email'
+            ref={register({
+              required: 'Email is required.',
+              pattern: {
+                value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                message: 'Please enter a valid email.',
+              },
+            })}
             placeholder='Jane Doe'
             aria-label='Full name'
             disabled={isLoading}
@@ -44,7 +59,7 @@ const SignupForm = ({ title }) => {
             {isLoading ? 'Processing' : 'Sign Up'}
           </button>
         </div>
-        <ErrorMessage message='Please enter a valid email.' />
+        {errors?.email && <ErrorMessage message={errors.email.message} />}{' '}
       </form>
     </>
   )
