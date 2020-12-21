@@ -1,3 +1,4 @@
+import SignupForm from './SignupForm'
 import { Tick } from '../../icons'
 
 const outcomes = [
@@ -37,7 +38,7 @@ const Hero = () => {
           </ul>
         )}
         <ComingSoonBadge />
-        <div>SIGNUP FORM GOES HERE</div>
+        <SignupForm title='Leave your email below, to be notified when this course is ready.' />
       </div>
     </div>
   )
